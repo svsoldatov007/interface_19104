@@ -13,16 +13,16 @@
 
     <v-navigation-drawer color="grey darken-4" v-model="drawer" app>
       <v-sheet color="grey darken-4" class="pa-4">
-        <v-icon size="25" color="grey lighten-2">mdi-camera</v-icon>
+        <!-- <v-icon size="25" color="grey lighten-2">mdi-camera</v-icon> -->
         <div
-          class="ps-4 text-h6 d-inline-flex align-center"
+          class="my-2 mr-2 text-h6 d-inline-flex align-center"
           style="color: white"
         >
-          Name of a device
+          {{ nameOfDevice }}
         </div>
       </v-sheet>
 
-      <v-divider></v-divider>
+      <v-divider light></v-divider>
       <!-- "#4CAF50" -->
       <v-list nav>
         <v-list-item-group dark active-class="green darken-3">
@@ -60,7 +60,7 @@
 <script>
 export default {
   name: 'App',
-
+  nameOfDevice: '-',
   components: {},
 
   data: () => ({
@@ -73,17 +73,26 @@ export default {
       ['mdi-key', 'Статус'],
       ['mdi-cog', 'Настройки'],
     ],
-    methods: {
-      moveOn() {
-        // this.$router.push(way)
-        console.log('way')
-      },
-    },
     watch: {
+      // отслеживаю переменную drawer для открытия/закрытия боковой панели
       group() {
         this.drawer = false
       },
     },
   }),
+  async created() {
+    try {
+      let response = await fetch(
+        'http://127.0.0.1:8000/SystemInfs/?format=json'
+      )
+      if (response.ok) {
+        let dataJson = await response.json()
+        let newDataJson = { ...dataJson[0] }
+        this.nameOfDevice = newDataJson.name_of_device
+      }
+    } catch (err) {
+      this.nameOfDevice = '-'
+    }
+  },
 }
 </script>

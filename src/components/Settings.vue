@@ -7,14 +7,14 @@
             <v-card-title style="height: 70px"></v-card-title>
           </div>
           <v-list>
-            <template v-for="(item, ind) in parametrs">
+            <template v-for="(item, ind) in parametrsData">
               <h2 :key="ind" class="px-4 mt-4">{{ item.title }}</h2>
-              <v-list-item selectable :key="ind">
+              <v-list-item selectable :key="ind + 'A'">
                 <v-list-item-content>
                   <v-list-item-title
                     class="pl-5 ma-3"
                     v-for="(setting, ind2) in item.arr"
-                    :key="ind2"
+                    :key="ind2 + 'B'"
                   >
                     <b>{{ setting.key }}</b> {{ setting.value }}
                   </v-list-item-title>
@@ -31,25 +31,49 @@
 export default {
   name: 'StatusVue',
   data: () => ({
-    parametrs: [
-      {
-        title: 'Settings',
+    parametrsData: [],
+  }),
+  async created() {
+    try {
+      let response = await fetch(
+        'http://127.0.0.1:8000/SystemInfs/?format=json'
+      )
+      if (response.ok) {
+        let dataJson = await response.json()
+        let newDataJson = { ...dataJson[0] }
+        this.parametrsData.push({
+          title: 'Settings',
+          arr: [
+            {
+              key: 'IP:',
+              value: newDataJson.ip,
+            },
+            {
+              key: 'DNS:',
+              value: '-',
+            },
+            {
+              key: 'NTP:',
+              value: '-',
+            },
+          ],
+        })
+      } else {
+        alert('Error: ', response.status)
+      }
+    } catch (err) {
+      this.parametrsData.push({
+        title: 'Ошибка ' + err.name,
         arr: [
           {
-            key: 'IP:',
-            value: '172.18.191.51',
-          },
-          {
-            key: 'DNS:',
-            value: '192.168.1.1',
-          },
-          {
-            key: 'NTP:',
-            value: '194.190.168.1',
+            key: '',
+            value: err.message,
           },
         ],
-      },
-    ],
-  }),
+      })
+      alert('Ошибка ' + err.name + ': ' + err.message)
+      console.log('Ошибка ' + err.name + ': ' + err.message + '\n' + err.stack)
+    }
+  },
 }
 </script>
