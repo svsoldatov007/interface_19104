@@ -45,9 +45,7 @@ export default {
   async created() {
     try {
       // отправляю GET запрос на локальный сервер для получения данных
-      let response = await fetch(
-        'http://127.0.0.1:8000/SystemInfs/?format=json'
-      )
+      let response = await fetch('http://127.0.0.1:8000/SystemInfs/')
       if (response.ok) {
         let dataJson = await response.json()
         let newDataJson = { ...dataJson[0] }
