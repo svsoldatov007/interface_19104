@@ -31,13 +31,22 @@
 export default {
   name: 'StatusVue',
   data: () => ({
+    ipDevice: '',
     parametrsData: [],
   }),
   async created() {
     try {
-      let response = await fetch(
-        'http://127.0.0.1:8000/SystemInfs/'
-      )
+      //считываю данные из конфиг файла
+      let req = await fetch('./settings.txt')
+      if (req.ok) {
+        let receivedIP = await req.text()
+        receivedIP = receivedIP.split('= ')[1]
+        this.ipDevice = receivedIP
+      }
+
+      this.ipDevice = 'http://' + this.ipDevice + ':8000/SystemInfs/'
+
+      let response = await fetch(this.ipDevice)
       if (response.ok) {
         let dataJson = await response.json()
         let newDataJson = { ...dataJson[0] }
@@ -71,8 +80,6 @@ export default {
           },
         ],
       })
-      alert('Ошибка ' + err.name + ': ' + err.message)
-      console.log('Ошибка ' + err.name + ': ' + err.message + '\n' + err.stack)
     }
   },
 }

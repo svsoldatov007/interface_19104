@@ -65,6 +65,7 @@ export default {
 
   data: () => ({
     drawer: null,
+    ipDevice: '',
     status: [
       { name: 'DHCP Status', way: '/dhcp_status' },
       { name: 'Main Stream', way: '/main_str' },
@@ -82,7 +83,36 @@ export default {
   }),
   async created() {
     try {
-      let response = await fetch('http://127.0.0.1:8000/SystemInfs/')
+      //считываю данные из конфиг файла
+      // const req = new XMLHttpRequest()
+      // req.open('GET', './settings.txt')
+      // req.responseType = 'text'
+      // req.send()
+      // req.onload = function () {
+      //   if (req.status != 200) {
+      //     // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
+      //     console.log(
+      //       `Ошибка ${req.status}: Конфигурационный файл ${req.statusText}`
+      //     )
+      //     alert(`Ошибка ${req.status}: Конфигурационный файл ${req.statusText}`)
+      //   } else {
+      //     // если всё прошло гладко, выводим результат
+      //     // response -- это ответ сервера
+      //     this.ipDevice = req.responseText.split('= ')[1]
+      //     console.log(this.ipDevice)
+      //   }
+      // }
+
+      let req = await fetch('./settings.txt')
+      if (req.ok) {
+        let receivedIP = await req.text()
+        receivedIP = receivedIP.split('= ')[1]
+        this.ipDevice = receivedIP
+      }
+      this.ipDevice = 'http://' + this.ipDevice + ':8000/SystemInfs/'
+      console.log('IP of the backend server: ' + this.ipDevice)
+
+      let response = await fetch(this.ipDevice)
       if (response.ok) {
         let dataJson = await response.json()
         let newDataJson = { ...dataJson[0] }
@@ -90,6 +120,8 @@ export default {
       }
     } catch (err) {
       this.nameOfDevice = '-'
+      alert('Ошибка ' + err.name + ': ' + err.message)
+      console.log('Ошибка ' + err.name + ': ' + err.message + '\n' + err.stack)
     }
   },
 }
