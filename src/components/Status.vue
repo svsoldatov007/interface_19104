@@ -44,7 +44,9 @@ export default {
   }),
   async created() {
     try {
-      let req = await fetch('./settings.txt')
+      //считываю данные из конфиг файла
+      // чтобы сделать это корректно - нужно, чтобы конфиг файл settings.ini лежал в папке public
+      let req = await fetch('./settings.ini')
       if (req.ok) {
         let receivedIP = await req.text()
         receivedIP = receivedIP.split('= ')[1]

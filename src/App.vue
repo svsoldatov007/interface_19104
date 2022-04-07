@@ -84,26 +84,8 @@ export default {
   async created() {
     try {
       //считываю данные из конфиг файла
-      // const req = new XMLHttpRequest()
-      // req.open('GET', './settings.txt')
-      // req.responseType = 'text'
-      // req.send()
-      // req.onload = function () {
-      //   if (req.status != 200) {
-      //     // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
-      //     console.log(
-      //       `Ошибка ${req.status}: Конфигурационный файл ${req.statusText}`
-      //     )
-      //     alert(`Ошибка ${req.status}: Конфигурационный файл ${req.statusText}`)
-      //   } else {
-      //     // если всё прошло гладко, выводим результат
-      //     // response -- это ответ сервера
-      //     this.ipDevice = req.responseText.split('= ')[1]
-      //     console.log(this.ipDevice)
-      //   }
-      // }
-
-      let req = await fetch('./settings.txt')
+      // чтобы сделать это корректно - нужно, чтобы конфиг файл settings.ini лежал в папке public
+      let req = await fetch('./settings.ini')
       if (req.ok) {
         let receivedIP = await req.text()
         receivedIP = receivedIP.split('= ')[1]
