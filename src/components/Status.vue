@@ -56,7 +56,6 @@ export default {
       this.ipDevice = 'http://' + this.ipDevice + ':8000/SystemInfs/'
       // отправляю GET запрос на локальный сервер для получения данных
       let response = await fetch(this.ipDevice)
-      // 'http://127.0.0.1:8000/SystemInfs/?format=json'
       if (response.ok) {
         let dataJson = await response.json()
         let newDataJson = { ...dataJson[0] }
@@ -126,59 +125,4 @@ export default {
     }
   },
 }
-
-// https://nvr.miem.hse.ru/api/erudite/rooms
-//       {
-//         title: 'Main Stream',
-//         arr: [
-//           {
-//             key: 'Encoding Type:',
-//             value: 'H.264',
-//           },
-//           {
-//             key: 'Encoded Size:',
-//             value: '1024x768@25',
-//           },
-//           {
-//             key: 'Bitrate(kbit):',
-//             value: '4096',
-//           },
-//           {
-//             key: 'TS URL:',
-//             value: 'http://172.18.191.51/0.ts',
-//           },
-//           {
-//             key: 'HLS URL:',
-//             value: 'Disable',
-//           },
-//           {
-//             key: 'FLV URL:',
-//             value: 'http://172.18.191.51/0.flv',
-//           },
-//           {
-//             key: 'RTSP URL:',
-//             value: 'Disable',
-//           },
-//           {
-//             key: 'RTMP(S) PUSH URL:',
-//             value: 'Disable',
-//           },
-//           {
-//             key: 'Multicast URL:',
-//             value: 'Disable',
-//           },
-//           {
-//             key: 'SRT URL:srt:',
-//             value: 'srt://172.18.191.51:9000',
-//           },
-//           {
-//             key: 'SRT PUSH URL:',
-//             value: 'Disable',
-//           },
-//           {
-//             key: 'HLS PUSH URL:',
-//             value: 'Disable',
-//           },
-//         ],
-//       },
 </script>
